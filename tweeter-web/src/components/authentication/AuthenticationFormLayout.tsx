@@ -18,13 +18,7 @@ const AuthenticationFormLayout = (props: Props) => {
       <div className="center">
         <div className="form-main w-100 m-auto rounded">
           <form>
-            <img
-              className="mb-4"
-              src="/bird-logo-64.png"
-              alt=""
-              width="72"
-              height="72"
-            />
+            <img className="mb-4" src="/bird-logo-64.png" alt="" width="72" height="72" />
             <h1 className="h3 mb-3 fw-normal">{props.headingText}</h1>
 
             {props.inputFieldGenerator()}
@@ -39,9 +33,7 @@ const AuthenticationFormLayout = (props: Props) => {
                 <input
                   type="checkbox"
                   value="remember-me"
-                  onChange={(event) =>
-                    props.setRememberMe(event.target.checked)
-                  }
+                  onChange={(event) => props.setRememberMe(event.target.checked)}
                 />{" "}
                 Remember me
               </label>
@@ -57,11 +49,7 @@ const AuthenticationFormLayout = (props: Props) => {
               onClick={() => props.submit()}
             >
               {props.isLoading ? (
-                <span
-                  className="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               ) : (
                 <div>{props.submitButtonLabel}</div>
               )}

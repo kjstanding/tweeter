@@ -2,12 +2,7 @@ import { User, AuthToken } from "tweeter-shared";
 import { UserService } from "../model/service/UserService";
 
 export interface LoginView {
-  updateUserInfo(
-    currentUser: User,
-    displayedUser: User | null,
-    authToken: AuthToken,
-    remember: boolean
-  ): void;
+  updateUserInfo(currentUser: User, displayedUser: User | null, authToken: AuthToken, remember: boolean): void;
   displayErrorMessage(message: string): void;
   navigate(url: string): void;
 }
@@ -39,9 +34,7 @@ export class LoginPresenter {
         this.view.navigate("/");
       }
     } catch (error) {
-      this.view.displayErrorMessage(
-        `Failed to log user in because of exception: ${error}`
-      );
+      this.view.displayErrorMessage(`Failed to log user in because of exception: ${error}`);
     } finally {
       this._isLoading = false;
     }

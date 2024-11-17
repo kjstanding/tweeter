@@ -9,8 +9,7 @@ import useUserInfo from "../userInfo/UserInfoHook";
 const AppNavbar = () => {
   const location = useLocation();
   const { authToken, clearUserInfo } = useUserInfo();
-  const { displayInfoMessage, displayErrorMessage, clearLastInfoMessage } =
-    useToastListener();
+  const { displayInfoMessage, displayErrorMessage, clearLastInfoMessage } = useToastListener();
 
   const logOut = async () => {
     displayInfoMessage("Logging Out...", 0);
@@ -21,9 +20,7 @@ const AppNavbar = () => {
       clearLastInfoMessage();
       clearUserInfo();
     } catch (error) {
-      displayErrorMessage(
-        `Failed to log user out because of exception: ${error}`
-      );
+      displayErrorMessage(`Failed to log user out because of exception: ${error}`);
     }
   };
 
@@ -33,13 +30,7 @@ const AppNavbar = () => {
   };
 
   return (
-    <Navbar
-      collapseOnSelect
-      className="mb-4"
-      expand="md"
-      bg="primary"
-      variant="dark"
-    >
+    <Navbar collapseOnSelect className="mb-4" expand="md" bg="primary" variant="dark">
       <Container>
         <Navbar.Brand>
           <div className="d-flex flex-row">

@@ -35,25 +35,25 @@ const StatusItemScroller = (props: Props) => {
     if (newItems) {
       setItems([...items, ...newItems]);
     }
-  }, [newItems])
+  }, [newItems]);
 
   const reset = async () => {
     setItems([]);
     setNewItems([]);
     setChangedDisplayedUser(true);
     presenter.reset();
-  }
+  };
 
   const listener: StatusItemView = {
     addItems: (newItems: Status[]) => setNewItems(newItems),
-    displayErrorMessage: displayErrorMessage
-  }
+    displayErrorMessage: displayErrorMessage,
+  };
 
   const [presenter] = useState(props.presenterGenerator(listener));
 
   const loadMoreItems = async () => {
     presenter.loadMoreItems(authToken!, displayedUser!.alias);
-    setChangedDisplayedUser(false)
+    setChangedDisplayedUser(false);
   };
 
   return (
@@ -66,10 +66,7 @@ const StatusItemScroller = (props: Props) => {
         loader={<h4>Loading...</h4>}
       >
         {items.map((item, index) => (
-          <div
-            key={index}
-            className="row mb-3 mx-0 px-0 border rounded bg-white"
-          >
+          <div key={index} className="row mb-3 mx-0 px-0 border rounded bg-white">
             <StatusItem item={item} />
           </div>
         ))}

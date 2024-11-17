@@ -1,18 +1,13 @@
 import useToaster from "./ToastHook";
 
 interface ToastListener {
-  displayInfoMessage: (
-    message: string,
-    duration: number,
-    bootstrapClasses?: string
-  ) => void;
+  displayInfoMessage: (message: string, duration: number, bootstrapClasses?: string) => void;
   displayErrorMessage: (message: string, bootstrapClasses?: string) => void;
   clearLastInfoMessage: () => void;
 }
 
 const useToastListener = (): ToastListener => {
-  const { displayInfoToast, displayErrorToast, deleteLastInfoToast } =
-    useToaster();
+  const { displayInfoToast, displayErrorToast, deleteLastInfoToast } = useToaster();
 
   return {
     displayInfoMessage: displayInfoToast,

@@ -7,10 +7,7 @@ import { Buffer } from "buffer";
 import useToastListener from "../../toaster/ToastListenerHook";
 import AuthenicationFields from "../AuthenticationFields";
 import useUserInfo from "../../userInfo/UserInfoHook";
-import {
-  RegisterPresenter,
-  RegisterView,
-} from "../../../presenters/RegisterPresenter";
+import { RegisterPresenter, RegisterView } from "../../../presenters/RegisterPresenter";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -35,15 +32,7 @@ const Register = () => {
   const [presenter] = useState(new RegisterPresenter(listener));
 
   const doRegister = async () => {
-    presenter.doRegister(
-      firstName,
-      lastName,
-      alias,
-      password,
-      imageBytes,
-      imageFileExtension,
-      rememberMe
-    );
+    presenter.doRegister(firstName, lastName, alias, password, imageBytes, imageFileExtension, rememberMe);
   };
 
   const inputFieldGenerator = () => {
@@ -73,11 +62,7 @@ const Register = () => {
           />
           <label htmlFor="lastNameInput">Last Name</label>
         </div>
-        <AuthenicationFields
-          setAlias={setAlias}
-          setPassword={setPassword}
-          doOnEnter={registerOnEnter}
-        />
+        <AuthenicationFields setAlias={setAlias} setPassword={setPassword} doOnEnter={registerOnEnter} />
         <div className="form-floating mb-3">
           <input
             type="file"
@@ -102,14 +87,7 @@ const Register = () => {
   };
 
   const checkSubmitButtonStatus = (): boolean => {
-    return (
-      !firstName ||
-      !lastName ||
-      !alias ||
-      !password ||
-      !imageUrl ||
-      !imageFileExtension
-    );
+    return !firstName || !lastName || !alias || !password || !imageUrl || !imageFileExtension;
   };
 
   const registerOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
@@ -132,13 +110,9 @@ const Register = () => {
         const imageStringBase64 = event.target?.result as string;
 
         // Remove unnecessary file metadata from the start of the string.
-        const imageStringBase64BufferContents =
-          imageStringBase64.split("base64,")[1];
+        const imageStringBase64BufferContents = imageStringBase64.split("base64,")[1];
 
-        const bytes: Uint8Array = Buffer.from(
-          imageStringBase64BufferContents,
-          "base64"
-        );
+        const bytes: Uint8Array = Buffer.from(imageStringBase64BufferContents, "base64");
 
         setImageBytes(bytes);
       };

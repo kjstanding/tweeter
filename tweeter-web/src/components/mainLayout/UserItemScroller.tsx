@@ -23,31 +23,32 @@ const UserItemScroller = (props: Props) => {
     reset();
   }, [displayedUser]);
 
-  // Load initial items whenever the displayed user changes. Done in a separate useEffect hook so the changes from reset will be visible.
+  // Load initial items whenever the displayed user changes.
+  // Done in a separate useEffect hook so the changes from reset will be visible.
   useEffect(() => {
-    if(changedDisplayedUser) {
+    if (changedDisplayedUser) {
       loadMoreItems();
     }
   }, [changedDisplayedUser]);
 
   // Add new items whenever there are new items to add
   useEffect(() => {
-    if(newItems) {
+    if (newItems) {
       setItems([...items, ...newItems]);
     }
-  }, [newItems])
+  }, [newItems]);
 
   const reset = async () => {
     setItems([]);
     setNewItems([]);
     setChangedDisplayedUser(true);
     presenter.reset();
-  }
+  };
 
   const listener: UserItemView = {
     addItems: (newItems: User[]) => setNewItems(newItems),
-    displayErrorMessage: displayErrorMessage
-  }
+    displayErrorMessage: displayErrorMessage,
+  };
 
   const [presenter] = useState(props.presenterGenerator(listener));
 
@@ -66,10 +67,7 @@ const UserItemScroller = (props: Props) => {
         loader={<h4>Loading...</h4>}
       >
         {items.map((item, index) => (
-          <div
-            key={index}
-            className="row mb-3 mx-0 px-0 border rounded bg-white"
-          >
+          <div key={index} className="row mb-3 mx-0 px-0 border rounded bg-white">
             <UserItem value={item} />
           </div>
         ))}

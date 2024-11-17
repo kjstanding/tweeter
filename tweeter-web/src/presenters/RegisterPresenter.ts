@@ -2,12 +2,7 @@ import { User, AuthToken } from "tweeter-shared";
 import { UserService } from "../model/service/UserService";
 
 export interface RegisterView {
-  updateUserInfo(
-    currentUser: User,
-    displayedUser: User | null,
-    authToken: AuthToken,
-    remember: boolean
-  ): void;
+  updateUserInfo(currentUser: User, displayedUser: User | null, authToken: AuthToken, remember: boolean): void;
   displayErrorMessage(message: string): void;
   navigate(url: string): void;
 }
@@ -47,9 +42,7 @@ export class RegisterPresenter {
       this.view.updateUserInfo(user, user, authToken, rememberMe);
       this.view.navigate("/");
     } catch (error) {
-      this.view.displayErrorMessage(
-        `Failed to register user because of exception: ${error}`
-      );
+      this.view.displayErrorMessage(`Failed to register user because of exception: ${error}`);
     } finally {
       this._isLoading = false;
     }

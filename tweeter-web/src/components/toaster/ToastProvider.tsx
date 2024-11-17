@@ -1,35 +1,12 @@
 import { Context, createContext, useState } from "react";
-import {
-  Toast,
-  Type,
-  makeErrorToast,
-  makeInfoToast,
-  makeSuccessToast,
-  makeWarningToast,
-} from "./Toast";
+import { Toast, Type, makeErrorToast, makeInfoToast, makeSuccessToast, makeWarningToast } from "./Toast";
 
 interface ToastInfo {
   toastList: Toast[];
-  displaySuccessToast: (
-    message: string,
-    duration: number,
-    bootstrapClasses?: string
-  ) => void;
-  displayErrorToast: (
-    message: string,
-    duration: number,
-    bootstrapClasses?: string
-  ) => void;
-  displayInfoToast: (
-    message: string,
-    duration: number,
-    bootstrapClasses?: string
-  ) => void;
-  displayWarningToast: (
-    message: string,
-    duration: number,
-    bootstrapClasses?: string
-  ) => void;
+  displaySuccessToast: (message: string, duration: number, bootstrapClasses?: string) => void;
+  displayErrorToast: (message: string, duration: number, bootstrapClasses?: string) => void;
+  displayInfoToast: (message: string, duration: number, bootstrapClasses?: string) => void;
+  displayWarningToast: (message: string, duration: number, bootstrapClasses?: string) => void;
   deleteToast: (id: string) => void;
   deleteAllToasts: () => void;
   deleteAllSuccessToasts: () => void;
@@ -62,8 +39,7 @@ const defaultToastInfo: ToastInfo = {
   deleteLastWarningToast: () => null,
 };
 
-export const ToastInfoContext: Context<ToastInfo> =
-  createContext<ToastInfo>(defaultToastInfo);
+export const ToastInfoContext: Context<ToastInfo> = createContext<ToastInfo>(defaultToastInfo);
 
 interface Props {
   children: React.ReactNode;
@@ -79,41 +55,25 @@ const ToastProvider: React.FC<Props> = ({ children }) => {
     setToastInfo({ ...toastInfo, ...toastList });
   };
 
-  const displaySuccessToast = (
-    message: string,
-    duration: number,
-    bootstrapClasses: string = ""
-  ): string => {
+  const displaySuccessToast = (message: string, duration: number, bootstrapClasses: string = ""): string => {
     const toast = makeSuccessToast(message, duration, bootstrapClasses);
     displayToast(toast);
     return toast.id;
   };
 
-  const displayErrorToast = (
-    message: string,
-    duration: number,
-    bootstrapClasses: string = ""
-  ): string => {
+  const displayErrorToast = (message: string, duration: number, bootstrapClasses: string = ""): string => {
     const toast = makeErrorToast(message, duration, bootstrapClasses);
     displayToast(toast);
     return toast.id;
   };
 
-  const displayInfoToast = (
-    message: string,
-    duration: number,
-    bootstrapClasses: string = ""
-  ): string => {
+  const displayInfoToast = (message: string, duration: number, bootstrapClasses: string = ""): string => {
     const toast = makeInfoToast(message, duration, bootstrapClasses);
     displayToast(toast);
     return toast.id;
   };
 
-  const displayWarningToast = (
-    message: string,
-    duration: number,
-    bootstrapClasses: string = ""
-  ): string => {
+  const displayWarningToast = (message: string, duration: number, bootstrapClasses: string = ""): string => {
     const toast = makeWarningToast(message, duration, bootstrapClasses);
     displayToast(toast);
     return toast.id;

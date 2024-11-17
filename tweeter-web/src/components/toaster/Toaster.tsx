@@ -27,10 +27,7 @@ const Toaster = ({ position }: Props) => {
     const now = Date.now();
 
     for (let toast of toastList) {
-      if (
-        toast.expirationMillisecond > 0 &&
-        toast.expirationMillisecond < now
-      ) {
+      if (toast.expirationMillisecond > 0 && toast.expirationMillisecond < now) {
         deleteToast(toast.id);
       }
     }
@@ -49,11 +46,7 @@ const Toaster = ({ position }: Props) => {
             onClose={() => deleteToast(toast.id)}
           >
             <Toast.Header>
-              <img
-                src="holder.js/20x20?text=%20"
-                className="rounded me-2"
-                alt=""
-              />
+              <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
               <strong className="me-auto">{toast.title}</strong>
             </Toast.Header>
             <Toast.Body>{toast.text}</Toast.Body>

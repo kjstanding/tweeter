@@ -15,12 +15,7 @@ const StatusItem = (props: Props) => {
       <div className="container px-0">
         <div className="row mx-0 px-0">
           <div className="col-auto p-3">
-            <img
-              src={props.item.user.imageUrl}
-              className="img-fluid"
-              width="80"
-              alt="Posting user"
-            />
+            <img src={props.item.user.imageUrl} className="img-fluid" width="80" alt="Posting user" />
           </div>
           <div className="col">
             <h2>
@@ -28,10 +23,7 @@ const StatusItem = (props: Props) => {
                 {props.item.user.firstName} {props.item.user.lastName}
               </b>{" "}
               -{" "}
-              <Link
-                to={props.item.user.alias}
-                onClick={(event) => navigateToUser(event)}
-              >
+              <Link to={props.item.user.alias} onClick={(event) => navigateToUser(event)}>
                 {props.item.user.alias}
               </Link>
             </h2>
