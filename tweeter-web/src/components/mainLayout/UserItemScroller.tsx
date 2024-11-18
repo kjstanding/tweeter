@@ -18,13 +18,20 @@ const UserItemScroller = (props: Props) => {
 
   const { displayedUser, authToken } = useUserInfo();
 
+  const listener: UserItemView = {
+    addItems: (newItems: User[]) => setNewItems(newItems),
+    displayErrorMessage: displayErrorMessage,
+  };
+
+  const [presenter] = useState(props.presenterGenerator(listener));
+
   // Initialize the component whenever the displayed user changes
   useEffect(() => {
     reset();
   }, [displayedUser]);
 
-  // Load initial items whenever the displayed user changes.
-  // Done in a separate useEffect hook so the changes from reset will be visible.
+  /* Load initial items whenever the displayed user changes.
+       Done in a separate useEffect hook so the changes from reset will be visible. */
   useEffect(() => {
     if (changedDisplayedUser) {
       loadMoreItems();
@@ -44,13 +51,6 @@ const UserItemScroller = (props: Props) => {
     setChangedDisplayedUser(true);
     presenter.reset();
   };
-
-  const listener: UserItemView = {
-    addItems: (newItems: User[]) => setNewItems(newItems),
-    displayErrorMessage: displayErrorMessage,
-  };
-
-  const [presenter] = useState(props.presenterGenerator(listener));
 
   const loadMoreItems = async () => {
     presenter.loadMoreItems(authToken!, displayedUser!.alias);

@@ -13,10 +13,12 @@ export interface UserInfoView {
 export class UserInfoPresenter {
   private view: UserInfoView;
   private service: UserService;
+  private _isLoading: boolean;
 
   constructor(view: UserInfoView) {
     this.service = new UserService();
     this.view = view;
+    this._isLoading = false;
   }
 
   public async setIsFollowerStatus(authToken: AuthToken, currentUser: User, displayedUser: User) {
@@ -49,6 +51,9 @@ export class UserInfoPresenter {
 
   public async followDisplayedUser(authToken: AuthToken, displayedUser: User): Promise<void> {
     try {
+      this._isLoading = true;
+      this.view.displayInfoMessage(`Following ${displayedUser!.name}...`, 0);
+
       const [followerCount, followeeCount] = await this.service.follow(authToken, displayedUser);
 
       this.view.setIsFollower(true);
@@ -56,11 +61,17 @@ export class UserInfoPresenter {
       this.view.setFolloweeCount(followeeCount);
     } catch (error) {
       this.view.displayErrorMessage(`Failed to follow user because of exception: ${error}`);
+    } finally {
+      this.view.clearLastInfoMessage();
+      this._isLoading = false;
     }
   }
 
   public async unfollowDisplayedUser(authToken: AuthToken, displayedUser: User): Promise<void> {
     try {
+      this._isLoading = true;
+      this.view.displayInfoMessage(`Unfollowing ${displayedUser!.name}...`, 0);
+
       const [followerCount, followeeCount] = await this.service.unfollow(authToken, displayedUser);
 
       this.view.setIsFollower(false);
@@ -68,6 +79,13 @@ export class UserInfoPresenter {
       this.view.setFolloweeCount(followeeCount);
     } catch (error) {
       this.view.displayErrorMessage(`Failed to unfollow user because of exception: ${error}`);
+    } finally {
+      this.view.clearLastInfoMessage();
+      this._isLoading = false;
     }
+  }
+
+  public get isLoading(): boolean {
+    return this._isLoading;
   }
 }

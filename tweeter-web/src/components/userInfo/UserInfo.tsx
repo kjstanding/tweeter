@@ -9,21 +9,10 @@ const UserInfo = () => {
   const [isFollower, setIsFollower] = useState(false);
   const [followeeCount, setFolloweeCount] = useState(-1);
   const [followerCount, setFollowerCount] = useState(-1);
-  const [isLoading, setIsLoading] = useState(false);
 
   const { displayErrorMessage, displayInfoMessage, clearLastInfoMessage } = useToastListener();
 
   const { currentUser, authToken, displayedUser, setDisplayedUser } = useUserInfo();
-
-  if (!displayedUser) {
-    setDisplayedUser(currentUser!);
-  }
-
-  useEffect(() => {
-    presenter.setIsFollowerStatus(authToken!, currentUser!, displayedUser!);
-    presenter.setNumFollowees(authToken!, displayedUser!);
-    presenter.setNumFollowers(authToken!, displayedUser!);
-  }, [displayedUser]);
 
   const listener: UserInfoView = {
     setIsFollower: setIsFollower,
@@ -36,6 +25,16 @@ const UserInfo = () => {
 
   const [presenter] = useState(new UserInfoPresenter(listener));
 
+  if (!displayedUser) {
+    setDisplayedUser(currentUser!);
+  }
+
+  useEffect(() => {
+    presenter.setIsFollowerStatus(authToken!, currentUser!, displayedUser!);
+    presenter.setNumFollowees(authToken!, displayedUser!);
+    presenter.setNumFollowers(authToken!, displayedUser!);
+  }, [displayedUser]);
+
   const switchToLoggedInUser = (event: React.MouseEvent): void => {
     event.preventDefault();
     setDisplayedUser(currentUser!);
@@ -43,30 +42,16 @@ const UserInfo = () => {
 
   const followDisplayedUser = async (event: React.MouseEvent): Promise<void> => {
     event.preventDefault();
-
-    setIsLoading(true);
-    displayInfoMessage(`Following ${displayedUser!.name}...`, 0);
-
-    await presenter.followDisplayedUser(authToken!, displayedUser!);
-
-    clearLastInfoMessage();
-    setIsLoading(false);
+    presenter.followDisplayedUser(authToken!, displayedUser!);
   };
 
   const unfollowDisplayedUser = async (event: React.MouseEvent): Promise<void> => {
     event.preventDefault();
-
-    setIsLoading(true);
-    displayInfoMessage(`Unfollowing ${displayedUser!.name}...`, 0);
-
-    await presenter.unfollowDisplayedUser(authToken!, displayedUser!);
-
-    clearLastInfoMessage();
-    setIsLoading(false);
+    presenter.unfollowDisplayedUser(authToken!, displayedUser!);
   };
 
   return (
-    <div className={isLoading ? "loading" : ""}>
+    <div className={presenter.isLoading ? "loading" : ""}>
       {currentUser === null || displayedUser === null || authToken === null ? (
         <></>
       ) : (
@@ -106,7 +91,7 @@ const UserInfo = () => {
                       style={{ width: "6em" }}
                       onClick={(event) => unfollowDisplayedUser(event)}
                     >
-                      {isLoading ? (
+                      {presenter.isLoading ? (
                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                       ) : (
                         <div>Unfollow</div>
@@ -120,7 +105,7 @@ const UserInfo = () => {
                       style={{ width: "6em" }}
                       onClick={(event) => followDisplayedUser(event)}
                     >
-                      {isLoading ? (
+                      {presenter.isLoading ? (
                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                       ) : (
                         <div>Follow</div>
