@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
-import { Buffer } from "buffer";
 import useToastListener from "../../toaster/ToastListenerHook";
 import AuthenicationFields from "../AuthenticationFields";
 import useUserInfo from "../../userInfo/UserInfoHook";
@@ -14,9 +13,6 @@ const Register = () => {
   const [lastName, setLastName] = useState("");
   const [alias, setAlias] = useState("");
   const [password, setPassword] = useState("");
-  const [imageBytes, setImageBytes] = useState<Uint8Array>(new Uint8Array());
-  const [imageUrl, setImageUrl] = useState<string>("");
-  const [imageFileExtension, setImageFileExtension] = useState<string>("");
   const [rememberMe, setRememberMe] = useState(false);
 
   const navigate = useNavigate();
@@ -32,7 +28,7 @@ const Register = () => {
   const [presenter] = useState(new RegisterPresenter(listener));
 
   const doRegister = async () => {
-    presenter.doRegister(firstName, lastName, alias, password, imageBytes, imageFileExtension, rememberMe);
+    presenter.doRegister(firstName, lastName, alias, password, rememberMe);
   };
 
   const inputFieldGenerator = () => {
@@ -72,7 +68,7 @@ const Register = () => {
             onChange={handleFileChange}
           />
           <label htmlFor="imageFileInput">User Image</label>
-          <img src={imageUrl} className="img-thumbnail" alt=""></img>
+          <img src={presenter.imageURL} className="img-thumbnail" alt=""></img>
         </div>
       </>
     );
@@ -87,7 +83,7 @@ const Register = () => {
   };
 
   const checkSubmitButtonStatus = (): boolean => {
-    return !firstName || !lastName || !alias || !password || !imageUrl || !imageFileExtension;
+    return !firstName || !lastName || !alias || !password || !presenter.imageURL || !presenter.imageFileExtension;
   };
 
   const registerOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
@@ -98,39 +94,7 @@ const Register = () => {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    handleImageFile(file);
-  };
-
-  const handleImageFile = (file: File | undefined) => {
-    if (file) {
-      setImageUrl(URL.createObjectURL(file));
-
-      const reader = new FileReader();
-      reader.onload = (event: ProgressEvent<FileReader>) => {
-        const imageStringBase64 = event.target?.result as string;
-
-        // Remove unnecessary file metadata from the start of the string.
-        const imageStringBase64BufferContents = imageStringBase64.split("base64,")[1];
-
-        const bytes: Uint8Array = Buffer.from(imageStringBase64BufferContents, "base64");
-
-        setImageBytes(bytes);
-      };
-      reader.readAsDataURL(file);
-
-      // Set image file extension (and move to a separate method)
-      const fileExtension = getFileExtension(file);
-      if (fileExtension) {
-        setImageFileExtension(fileExtension);
-      }
-    } else {
-      setImageUrl("");
-      setImageBytes(new Uint8Array());
-    }
-  };
-
-  const getFileExtension = (file: File): string | undefined => {
-    return file.name.split(".").pop();
+    presenter.handleImageFile(file);
   };
 
   return (
