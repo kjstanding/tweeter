@@ -1,5 +1,5 @@
 import { User, AuthToken, Status } from "tweeter-shared";
-import { UserService } from "../model/service/UserService";
+import { StatusService } from "../model/service/StatusService";
 
 export interface PostStatusView {
   setPost: (post: string) => void;
@@ -9,13 +9,13 @@ export interface PostStatusView {
 }
 
 export class PostStatusPresenter {
-  private service: UserService;
+  private service: StatusService;
   private view: PostStatusView;
   private _isLoading: boolean = false;
 
   constructor(view: PostStatusView) {
     this.view = view;
-    this.service = new UserService();
+    this.service = new StatusService();
   }
 
   public async submitPost(post: string, currentUser: User, authToken: AuthToken): Promise<void> {
