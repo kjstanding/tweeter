@@ -13,6 +13,8 @@ const Register = () => {
   const [lastName, setLastName] = useState("");
   const [alias, setAlias] = useState("");
   const [password, setPassword] = useState("");
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageFileExtension, setImageFileExtension] = useState<string>("");
   const [rememberMe, setRememberMe] = useState(false);
 
   const navigate = useNavigate();
@@ -21,6 +23,8 @@ const Register = () => {
 
   const listener: RegisterView = {
     updateUserInfo: updateUserInfo,
+    setImageUrl: setImageUrl,
+    setImageFileExtension: setImageFileExtension,
     displayErrorMessage: displayErrorMessage,
     navigate: navigate,
   };
@@ -28,7 +32,7 @@ const Register = () => {
   const [presenter] = useState(new RegisterPresenter(listener));
 
   const doRegister = async () => {
-    presenter.doRegister(firstName, lastName, alias, password, rememberMe);
+    presenter.doRegister(firstName, lastName, alias, password, imageFileExtension, rememberMe);
   };
 
   const inputFieldGenerator = () => {
@@ -68,7 +72,7 @@ const Register = () => {
             onChange={handleFileChange}
           />
           <label htmlFor="imageFileInput">User Image</label>
-          <img src={presenter.imageURL} className="img-thumbnail" alt=""></img>
+          <img src={imageUrl} className="img-thumbnail" alt=""></img>
         </div>
       </>
     );
@@ -83,7 +87,7 @@ const Register = () => {
   };
 
   const checkSubmitButtonStatus = (): boolean => {
-    return !firstName || !lastName || !alias || !password || !presenter.imageURL || !presenter.imageFileExtension;
+    return !firstName || !lastName || !alias || !password || !imageUrl || !imageFileExtension;
   };
 
   const registerOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
