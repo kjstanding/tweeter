@@ -1,57 +1,47 @@
-import { AuthToken, User } from "tweeter-shared";
-import { UserService } from "../model/service/UserService";
-import { FollowService } from "../model/service/FollowService";
+import { AuthToken, User } from 'tweeter-shared';
+import { FollowService } from '../model/service/FollowService';
+import { MessageView, Presenter } from './Presenter';
 
-export interface UserInfoView {
+export interface UserInfoView extends MessageView {
   setIsFollower(isFollower: boolean): void;
   setFolloweeCount(count: number): void;
   setFollowerCount(count: number): void;
-  displayErrorMessage(message: string): void;
-  displayInfoMessage(message: string, duration: number): void;
-  clearLastInfoMessage(): void;
 }
 
-export class UserInfoPresenter {
-  private view: UserInfoView;
+export class UserInfoPresenter extends Presenter<UserInfoView> {
   private service: FollowService;
   private _isLoading: boolean;
 
   constructor(view: UserInfoView) {
+    super(view);
     this.service = new FollowService();
-    this.view = view;
     this._isLoading = false;
   }
 
   public async setIsFollowerStatus(authToken: AuthToken, currentUser: User, displayedUser: User) {
-    try {
+    await this.doFailureReportingOperation(async () => {
       if (currentUser === displayedUser) {
         this.view.setIsFollower(false);
       } else {
         this.view.setIsFollower(await this.service.getIsFollowerStatus(authToken!, currentUser!, displayedUser!));
       }
-    } catch (error) {
-      this.view.displayErrorMessage(`Failed to determine follower status because of exception: ${error}`);
-    }
+    }, 'determine follower status');
   }
 
   public async setNumFollowees(authToken: AuthToken, displayedUser: User) {
-    try {
+    await this.doFailureReportingOperation(async () => {
       this.view.setFolloweeCount(await this.service.getFolloweeCount(authToken, displayedUser));
-    } catch (error) {
-      this.view.displayErrorMessage(`Failed to get followees count because of exception: ${error}`);
-    }
+    }, 'get followees count');
   }
 
   public async setNumFollowers(authToken: AuthToken, displayedUser: User) {
-    try {
+    await this.doFailureReportingOperation(async () => {
       this.view.setFollowerCount(await this.service.getFollowerCount(authToken, displayedUser));
-    } catch (error) {
-      this.view.displayErrorMessage(`Failed to get followers count because of exception: ${error}`);
-    }
+    }, 'get followers count');
   }
 
   public async followDisplayedUser(authToken: AuthToken, displayedUser: User): Promise<void> {
-    try {
+    await this.doFailureReportingOperation(async () => {
       this._isLoading = true;
       this.view.displayInfoMessage(`Following ${displayedUser!.name}...`, 0);
 
@@ -60,16 +50,14 @@ export class UserInfoPresenter {
       this.view.setIsFollower(true);
       this.view.setFollowerCount(followerCount);
       this.view.setFolloweeCount(followeeCount);
-    } catch (error) {
-      this.view.displayErrorMessage(`Failed to follow user because of exception: ${error}`);
-    } finally {
-      this.view.clearLastInfoMessage();
-      this._isLoading = false;
-    }
+    }, 'follow user');
+
+    this.view.clearLastInfoMessage();
+    this._isLoading = false;
   }
 
   public async unfollowDisplayedUser(authToken: AuthToken, displayedUser: User): Promise<void> {
-    try {
+    await this.doFailureReportingOperation(async () => {
       this._isLoading = true;
       this.view.displayInfoMessage(`Unfollowing ${displayedUser!.name}...`, 0);
 
@@ -78,12 +66,10 @@ export class UserInfoPresenter {
       this.view.setIsFollower(false);
       this.view.setFollowerCount(followerCount);
       this.view.setFolloweeCount(followeeCount);
-    } catch (error) {
-      this.view.displayErrorMessage(`Failed to unfollow user because of exception: ${error}`);
-    } finally {
-      this.view.clearLastInfoMessage();
-      this._isLoading = false;
-    }
+    }, 'unfollow user');
+
+    this.view.clearLastInfoMessage();
+    this._isLoading = false;
   }
 
   public get isLoading(): boolean {

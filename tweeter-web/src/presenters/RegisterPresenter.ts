@@ -1,25 +1,16 @@
-import { User, AuthToken } from 'tweeter-shared';
-import { UserService } from '../model/service/UserService';
 import { Buffer } from 'buffer';
+import { AuthPresenter, AuthView } from './AuthPresenter';
 
-export interface RegisterView {
-  updateUserInfo(currentUser: User, displayedUser: User | null, authToken: AuthToken, remember: boolean): void;
+export interface RegisterView extends AuthView {
   setImageUrl(url: string): void;
   setImageFileExtension(extension: string): void;
-  displayErrorMessage(message: string): void;
-  navigate(url: string): void;
 }
 
-export class RegisterPresenter {
-  private service: UserService;
-  private view: RegisterView;
-  private _isLoading: boolean;
+export class RegisterPresenter extends AuthPresenter<RegisterView> {
   private _imageBytes: Uint8Array;
 
   constructor(view: RegisterView) {
-    this.service = new UserService();
-    this.view = view;
-    this._isLoading = false;
+    super(view);
     this._imageBytes = new Uint8Array();
   }
 
@@ -31,25 +22,17 @@ export class RegisterPresenter {
     imageFileExtension: string,
     rememberMe: boolean
   ) {
-    try {
-      this._isLoading = true;
+    await this.doAuthOperation(async () => {
+      return this.service.register(firstName, lastName, alias, password, this.imageBytes, imageFileExtension);
+    }, rememberMe);
+  }
 
-      const [user, authToken] = await this.service.register(
-        firstName,
-        lastName,
-        alias,
-        password,
-        this.imageBytes,
-        imageFileExtension
-      );
+  protected navigationURL(): string {
+    return '/';
+  }
 
-      this.view.updateUserInfo(user, user, authToken, rememberMe);
-      this.view.navigate('/');
-    } catch (error) {
-      this.view.displayErrorMessage(`Failed to register user because of exception: ${error}`);
-    } finally {
-      this._isLoading = false;
-    }
+  protected operationDescription(): string {
+    return 'register user';
   }
 
   public handleImageFile(file: File | undefined) {
@@ -82,10 +65,6 @@ export class RegisterPresenter {
 
   public getFileExtension(file: File): string | undefined {
     return file.name.split('.').pop();
-  }
-
-  public get isLoading(): boolean {
-    return this._isLoading;
   }
 
   public get imageBytes(): Uint8Array {

@@ -1,46 +1,28 @@
-import { User, AuthToken } from "tweeter-shared";
-import { UserService } from "../model/service/UserService";
+import { AuthPresenter, AuthView } from './AuthPresenter';
 
-export interface LoginView {
-  updateUserInfo(currentUser: User, displayedUser: User | null, authToken: AuthToken, remember: boolean): void;
-  displayErrorMessage(message: string): void;
-  navigate(url: string): void;
-}
-
-export class LoginPresenter {
-  private service: UserService;
-  private view: LoginView;
-  private _isLoading: boolean;
+export class LoginPresenter extends AuthPresenter<AuthView> {
   private originalUrl: string | undefined;
 
-  constructor(view: LoginView, originalUrl: string | undefined) {
-    this.service = new UserService();
-    this.view = view;
-    this._isLoading = false;
+  constructor(view: AuthView, originalUrl: string | undefined) {
+    super(view);
     this.originalUrl = originalUrl;
   }
 
   public async doLogin(alias: string, password: string, rememberMe: boolean) {
-    try {
-      this._isLoading = true;
+    await this.doAuthOperation(async () => {
+      return this.service.login(alias, password);
+    }, rememberMe);
+  }
 
-      const [user, authToken] = await this.service.login(alias, password);
-
-      this.view.updateUserInfo(user, user, authToken, rememberMe);
-
-      if (!!this.originalUrl) {
-        this.view.navigate(this.originalUrl);
-      } else {
-        this.view.navigate("/");
-      }
-    } catch (error) {
-      this.view.displayErrorMessage(`Failed to log user in because of exception: ${error}`);
-    } finally {
-      this._isLoading = false;
+  protected navigationURL(): string {
+    if (!!this.originalUrl) {
+      return this.originalUrl;
+    } else {
+      return '/';
     }
   }
 
-  public get isLoading(): boolean {
-    return this._isLoading;
+  protected operationDescription(): string {
+    return 'log user in';
   }
 }

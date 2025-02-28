@@ -1,18 +1,19 @@
-import "./App.css";
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
-import Login from "./components/authentication/login/Login";
-import Register from "./components/authentication/register/Register";
-import MainLayout from "./components/mainLayout/MainLayout";
-import Toaster from "./components/toaster/Toaster";
-import UserItemScroller from "./components/mainLayout/UserItemScroller";
-import StatusItemScroller from "./components/mainLayout/StatusItemScroller";
-import useUserInfo from "./components/userInfo/UserInfoHook";
-import { FolloweePresenter } from "./presenters/FolloweePresenter";
-import { UserItemView } from "./presenters/UserItemPresenter";
-import { FollowerPresenter } from "./presenters/FollowerPresenter";
-import { StatusItemView } from "./presenters/StatusItemPresenter";
-import { FeedPresenter } from "./presenters/FeedPresenter";
-import { StoryPresenter } from "./presenters/StoryPresenter";
+import './App.css';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import Login from './components/authentication/login/Login';
+import Register from './components/authentication/register/Register';
+import MainLayout from './components/mainLayout/MainLayout';
+import Toaster from './components/toaster/Toaster';
+import useUserInfo from './components/userInfo/UserInfoHook';
+import { FolloweePresenter } from './presenters/FolloweePresenter';
+import { FollowerPresenter } from './presenters/FollowerPresenter';
+import { FeedPresenter } from './presenters/FeedPresenter';
+import { StoryPresenter } from './presenters/StoryPresenter';
+import { PagedItemView } from './presenters/PagedItemPresenter';
+import { Status, User } from 'tweeter-shared';
+import ItemScroller from './components/mainLayout/ItemScroller';
+import StatusItem from './components/statusItem/StatusItem';
+import UserItem from './components/userItem/UserItem';
 
 const App = () => {
   const { currentUser, authToken } = useUserInfo();
@@ -37,25 +38,41 @@ const AuthenticatedRoutes = () => {
         <Route
           path="feed"
           element={
-            <StatusItemScroller key={1} presenterGenerator={(view: StatusItemView) => new FeedPresenter(view)} />
+            <ItemScroller
+              key={'feed'}
+              presenterGenerator={(view: PagedItemView<Status>) => new FeedPresenter(view)}
+              renderItem={(item: Status) => <StatusItem item={item} />}
+            />
           }
         />
         <Route
           path="story"
           element={
-            <StatusItemScroller key={2} presenterGenerator={(view: StatusItemView) => new StoryPresenter(view)} />
+            <ItemScroller
+              key={'story'}
+              presenterGenerator={(view: PagedItemView<Status>) => new StoryPresenter(view)}
+              renderItem={(item: Status) => <StatusItem item={item} />}
+            />
           }
         />
         <Route
           path="followees"
           element={
-            <UserItemScroller key={1} presenterGenerator={(view: UserItemView) => new FolloweePresenter(view)} />
+            <ItemScroller
+              key={'followees'}
+              presenterGenerator={(view: PagedItemView<User>) => new FolloweePresenter(view)}
+              renderItem={(item: User) => <UserItem item={item} />}
+            />
           }
         />
         <Route
           path="followers"
           element={
-            <UserItemScroller key={2} presenterGenerator={(view: UserItemView) => new FollowerPresenter(view)} />
+            <ItemScroller
+              key={'followers'}
+              presenterGenerator={(view: PagedItemView<User>) => new FollowerPresenter(view)}
+              renderItem={(item: User) => <UserItem item={item} />}
+            />
           }
         />
         <Route path="logout" element={<Navigate to="/login" />} />
