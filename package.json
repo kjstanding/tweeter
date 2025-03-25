@@ -10,5 +10,15 @@
   "dependencies": {
     "rimraf": "^5.0.5",
     "vite-plugin-dts": "^3.7.3"
+  },
+  "scripts": {
+    "dev": "cd tweeter-web && npm run dev",
+    "serve": "cd tweeter-web && npm run serve",
+    "reload": "npm run build:web && npm run serve",
+    "reload-all": "npm run build-all && npm run serve",
+    "build-all": "npm run clean && npm run build:shared && npm run build:web",
+    "clean": "rimraf tweeter-shared/dist tweeter-web/dist",
+    "build:shared": "cd tweeter-shared && npm run build",
+    "build:web": "cd tweeter-web && npm run build"
   }
 }
