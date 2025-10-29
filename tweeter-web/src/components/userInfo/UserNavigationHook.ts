@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef } from "react";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfo from "./UserInfoHook";
 import { UserNavigationPresenter, UserNavigationView } from "../../presenters/UserNavigationPresenter";
@@ -16,7 +16,7 @@ const useUserNavigation = (): UserNavigation => {
     displayErrorMessage: displayErrorMessage,
   };
 
-  const [presenter] = useState(new UserNavigationPresenter(listener));
+  const presenter = useRef(new UserNavigationPresenter(listener)).current;
 
   const navigateToUser = async (event: React.MouseEvent): Promise<void> => {
     event.preventDefault();

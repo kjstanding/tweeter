@@ -1,6 +1,6 @@
 import "./Register.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import useToastListener from "../../toaster/ToastListenerHook";
@@ -29,7 +29,7 @@ const Register = () => {
     navigate: navigate,
   };
 
-  const [presenter] = useState(new RegisterPresenter(listener));
+  const presenter = useRef(new RegisterPresenter(listener)).current;
 
   const doRegister = async () => {
     presenter.doRegister(firstName, lastName, alias, password, imageFileExtension, rememberMe);

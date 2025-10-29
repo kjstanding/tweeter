@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import useToastListener from '../toaster/ToastListenerHook';
 import useUserInfo from '../userInfo/UserInfoHook';
@@ -22,7 +22,7 @@ const ItemScroller = <T, S>(props: Props<T, S>) => {
     displayErrorMessage: displayErrorMessage,
   };
 
-  const [presenter] = useState(props.presenterGenerator(listener));
+  const presenter = useRef(props.presenterGenerator(listener)).current;
 
   // Initialize the component whenever the displayed user changes
   useEffect(() => {

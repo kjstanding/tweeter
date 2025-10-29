@@ -1,6 +1,6 @@
 import './Login.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthenticationFormLayout from '../AuthenticationFormLayout';
 import useToastListener from '../../toaster/ToastListenerHook';
@@ -28,7 +28,7 @@ const Login = (props: Props) => {
     navigate: navigate,
   };
 
-  const [presenter] = useState(new LoginPresenter(listener, props.originalUrl));
+  const presenter = useRef(new LoginPresenter(listener, props.originalUrl)).current;
 
   const doLogin = async () => {
     presenter.doLogin(alias, password, rememberMe);

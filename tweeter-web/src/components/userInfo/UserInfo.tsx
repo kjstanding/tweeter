@@ -1,5 +1,5 @@
 import "./UserInfo.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfo from "./UserInfoHook";
@@ -23,7 +23,7 @@ const UserInfo = () => {
     clearLastInfoMessage: clearLastInfoMessage,
   };
 
-  const [presenter] = useState(new UserInfoPresenter(listener));
+  const presenter = useRef(new UserInfoPresenter(listener)).current;
 
   if (!displayedUser) {
     setDisplayedUser(currentUser!);

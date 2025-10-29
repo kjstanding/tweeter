@@ -1,5 +1,5 @@
 import "./AppNavbar.css";
-import { useState } from "react";
+import { useRef } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink, useLocation } from "react-router-dom";
 import Image from "react-bootstrap/Image";
@@ -19,7 +19,7 @@ const AppNavbar = () => {
     clearLastInfoMessage,
   };
 
-  const [presenter] = useState(new AppNavbarPresenter(listener));
+  const presenter = useRef(new AppNavbarPresenter(listener)).current;
 
   return (
     <Navbar collapseOnSelect className="mb-4" expand="md" bg="primary" variant="dark">
