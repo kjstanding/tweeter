@@ -1,0 +1,6 @@
+BUCKET='kjstanding-tweeter'
+LAMBDA_ROLE='arn:aws:iam::875373208912:role/cs340-tweeter-lambda'
+EDIT_LAMBDALIST='
+tweeterGetFollowees | lambda/follow/GetFolloweesLambda.handler
+'
+LAMBDALAYER_ARN='arn:aws:lambda:us-west-1:875373208912:layer:tweeterLambdaLayer:2'

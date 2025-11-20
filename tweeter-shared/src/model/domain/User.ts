@@ -1,15 +1,12 @@
+import { UserDTO } from "../dto/UserDTO";
+
 export class User {
   private _firstName: string;
   private _lastName: string;
   private _alias: string;
   private _imageUrl: string;
 
-  public constructor(
-    firstName: string,
-    lastName: string,
-    alias: string,
-    imageUrl: string
-  ) {
+  public constructor(firstName: string, lastName: string, alias: string, imageUrl: string) {
     this._firstName = firstName;
     this._lastName = lastName;
     this._alias = alias;
@@ -64,12 +61,7 @@ export class User {
         _alias: string;
         _imageUrl: string;
       } = JSON.parse(json);
-      return new User(
-        jsonObject._firstName,
-        jsonObject._lastName,
-        jsonObject._alias,
-        jsonObject._imageUrl
-      );
+      return new User(jsonObject._firstName, jsonObject._lastName, jsonObject._alias, jsonObject._imageUrl);
     } else {
       return null;
     }
@@ -77,5 +69,18 @@ export class User {
 
   public toJson(): string {
     return JSON.stringify(this);
+  }
+
+  public get dto(): UserDTO {
+    return {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      alias: this.alias,
+      imageUrl: this.imageUrl,
+    };
+  }
+
+  public static fromDTO(userDTO: UserDTO | null): User | null {
+    return userDTO == null ? null : new User(userDTO.firstName, userDTO.lastName, userDTO.alias, userDTO.imageUrl);
   }
 }
