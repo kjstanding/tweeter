@@ -5,7 +5,7 @@ export const handler = async (request: PagedUserItemRequest): Promise<PagedUserI
   const followService = new FollowService();
 
   try {
-    const [users, hasMore] = await followService.loadMoreFollowees(
+    const [users, hasMore] = await followService.loadMoreFollowers(
       request.token,
       request.userAlias,
       request.pageSize,
@@ -21,7 +21,7 @@ export const handler = async (request: PagedUserItemRequest): Promise<PagedUserI
   } catch (error) {
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'Failed to get followees',
+      message: error instanceof Error ? error.message : 'Failed to get followers',
       users: [],
       hasMore: false,
     };

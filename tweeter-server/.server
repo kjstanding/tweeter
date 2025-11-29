@@ -1,6 +1,20 @@
 BUCKET='kjstanding-tweeter'
 LAMBDA_ROLE='arn:aws:iam::875373208912:role/cs340-tweeter-lambda'
 EDIT_LAMBDALIST='
+tweeterFollow | lambda/follow/FollowLambda.handler
+tweeterGetFolloweeCount | lambda/follow/GetFolloweeCountLambda.handler
 tweeterGetFollowees | lambda/follow/GetFolloweesLambda.handler
+tweeterGetFollowerCount | lambda/follow/GetFollowerCountLambda.handler
+tweeterGetFollowers | lambda/follow/GetFollowersLambda.handler
+tweeterGetFeed | lambda/status/GetFeedLambda.handler
+tweeterGetStory | lambda/status/GetStoryLambda.handler
+tweeterGetUser | lambda/user/GetUserLambda.handler
+tweeterIsFollowerStatus | lambda/follow/IsFollowerStatusLambda.handler
+tweeterLogin | lambda/user/LoginLambda.handler
+tweeterLogout | lambda/user/LogoutLambda.handler
+tweeterPostStatus | lambda/status/PostStatusLambda.handler
+tweeterRegister | lambda/user/RegisterLambda.handler
+tweeterUnfollow | lambda/follow/UnfollowLambda.handler
+
 '
-LAMBDALAYER_ARN='arn:aws:lambda:us-west-1:875373208912:layer:tweeterLambdaLayer:2'
+LAMBDALAYER_ARN='arn:aws:lambda:us-west-1:875373208912:layer:tweeterLambdaLayer:6'

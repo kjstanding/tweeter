@@ -1,6 +1,7 @@
-import { PostSegment, Type } from "./PostSegment";
-import { User } from "./User";
-import { format } from "date-fns";
+import { PostSegment, Type } from './PostSegment';
+import { User } from './User';
+import { StatusDTO } from '../dto/StatusDTO';
+import { format } from 'date-fns';
 
 export class Status {
   private _post: string;
@@ -38,14 +39,7 @@ export class Status {
     }
 
     if (startIndex < post.length) {
-      segments.push(
-        new PostSegment(
-          post.substring(startIndex),
-          startIndex,
-          post.length,
-          Type.text
-        )
-      );
+      segments.push(new PostSegment(post.substring(startIndex), startIndex, post.length, Type.text));
     }
 
     return segments;
@@ -77,9 +71,7 @@ export class Status {
 
       if (startIndex > -1) {
         // Push the url
-        references.push(
-          new PostSegment(url, startIndex, startIndex + url.length, Type.url)
-        );
+        references.push(new PostSegment(url, startIndex, startIndex + url.length, Type.url));
 
         // Move start and previous start past the url
         startIndex = startIndex + url.length;
@@ -94,7 +86,7 @@ export class Status {
     const urls: string[] = [];
 
     for (let word of post.split(/(\s+)/)) {
-      if (word.startsWith("http://") || word.startsWith("https://")) {
+      if (word.startsWith('http://') || word.startsWith('https://')) {
         const endIndex = Status.findUrlEndIndex(word);
         urls.push(word.substring(0, endIndex));
       }
@@ -106,20 +98,20 @@ export class Status {
   private static findUrlEndIndex(word: string): number {
     let index;
 
-    if (word.includes(".com")) {
-      index = word.indexOf(".com");
+    if (word.includes('.com')) {
+      index = word.indexOf('.com');
       index += 4;
-    } else if (word.includes(".net")) {
-      index = word.indexOf(".net");
+    } else if (word.includes('.net')) {
+      index = word.indexOf('.net');
       index += 4;
-    } else if (word.includes(".org")) {
-      index = word.indexOf(".org");
+    } else if (word.includes('.org')) {
+      index = word.indexOf('.org');
       index += 4;
-    } else if (word.includes(".edu")) {
-      index = word.indexOf(".edu");
+    } else if (word.includes('.edu')) {
+      index = word.indexOf('.edu');
       index += 4;
-    } else if (word.includes(".mil")) {
-      index = word.indexOf(".mil");
+    } else if (word.includes('.mil')) {
+      index = word.indexOf('.mil');
       index += 4;
     } else {
       index = word.length;
@@ -149,14 +141,7 @@ export class Status {
 
       if (startIndex > -1) {
         // Push the alias
-        references.push(
-          new PostSegment(
-            mention,
-            startIndex,
-            startIndex + mention.length,
-            Type.alias
-          )
-        );
+        references.push(new PostSegment(mention, startIndex, startIndex + mention.length, Type.alias));
 
         // Move start and previous start past the mention
         startIndex = startIndex + mention.length;
@@ -171,9 +156,9 @@ export class Status {
     const mentions: string[] = [];
 
     for (let word of post.split(/(\s+)/)) {
-      if (word.startsWith("@")) {
+      if (word.startsWith('@')) {
         // Remove all non-alphanumeric characters
-        word.replaceAll(/[^a-zA-Z0-9]/g, "");
+        word.replaceAll(/[^a-zA-Z0-9]/g, '');
 
         mentions.push(word);
       }
@@ -190,9 +175,7 @@ export class Status {
     let match;
     while ((match = regex.exec(post)) !== null) {
       const matchIndex = match.index;
-      newlines.push(
-        new PostSegment("\n", matchIndex, matchIndex + 1, Type.newline)
-      );
+      newlines.push(new PostSegment('\n', matchIndex, matchIndex + 1, Type.newline));
     }
 
     return newlines;
@@ -220,7 +203,7 @@ export class Status {
 
   public get formattedDate(): string {
     let date: Date = new Date(this.timestamp);
-    return format(date, "MMMM dd, yyyy HH:mm:ss");
+    return format(date, 'MMMM dd, yyyy HH:mm:ss');
   }
 
   public set timestamp(value: number) {
@@ -236,11 +219,7 @@ export class Status {
   }
 
   public equals(other: Status): boolean {
-    return (
-      this._user.equals(other.user) &&
-      this._timestamp === other._timestamp &&
-      this._post === other.post
-    );
+    return this._user.equals(other.user) && this._timestamp === other._timestamp && this._post === other.post;
   }
 
   public static fromJson(json: string | null | undefined): Status | null {
@@ -273,5 +252,17 @@ export class Status {
 
   public toJson(): string {
     return JSON.stringify(this);
+  }
+
+  public get dto(): StatusDTO {
+    return {
+      post: this.post,
+      user: this.user.dto,
+      timestamp: this.timestamp,
+    };
+  }
+
+  public static fromDTO(statusDTO: StatusDTO | null): Status | null {
+    return statusDTO == null ? null : new Status(statusDTO.post, User.fromDTO(statusDTO.user)!, statusDTO.timestamp);
   }
 }

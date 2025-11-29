@@ -1,0 +1,13 @@
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQWxpYXMiOiJAYWxpY2UiLCJpc3N1ZWRUaW1lIjoxNjk0MzIxNjAwfQ.dummySignature",
+  "status": {
+    "post": "Hello world! This is my first tweet @alice",
+    "user": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "alias": "@johndoe",
+      "imageUrl": "https://example.com/images/johndoe.jpg"
+    },
+    "timestamp": 1694321600
+  }
+}

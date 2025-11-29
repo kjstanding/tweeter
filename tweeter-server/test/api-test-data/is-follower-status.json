@@ -1,0 +1,15 @@
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQWxpYXMiOiJAYWxpY2UiLCJpc3N1ZWRUaW1lIjoxNjk0MzIxNjAwfQ.dummySignature",
+  "user": {
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "alias": "@alice",
+    "imageUrl": "https://example.com/images/alice.jpg"
+  },
+  "selectedUser": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "alias": "@johndoe",
+    "imageUrl": "https://example.com/images/johndoe.jpg"
+  }
+}
