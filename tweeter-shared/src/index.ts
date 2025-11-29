@@ -16,6 +16,7 @@ export type { LogoutRequest } from './model/net/request/LogoutRequest';
 export type { PagedItemRequest } from './model/net/request/PagedItemRequest';
 export type { PostStatusRequest } from './model/net/request/PostStatusRequest';
 export type { RegisterRequest } from './model/net/request/RegisterRequest';
+export type { TweeterRequest } from './model/net/request/TweeterRequest';
 
 // Responses
 export type { FollowCountResponse } from './model/net/response/FollowCountResponse';

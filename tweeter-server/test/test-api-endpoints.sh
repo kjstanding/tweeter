@@ -65,13 +65,13 @@ echo -e "${YELLOW}=== AUTH ENDPOINTS ===${NC}\n"
 test_endpoint "Login" "/auth/login" "${DATA_DIR}/login.json"
 test_endpoint "Register" "/auth/register" "${DATA_DIR}/register.json"
 test_endpoint "Logout" "/auth/logout" "${DATA_DIR}/logout.json"
+test_endpoint "Get User" "/auth/get-user" "${DATA_DIR}/get-user.json"
 
-# User Endpoints
-echo -e "${YELLOW}=== USER ENDPOINTS ===${NC}\n"
-test_endpoint "Get User" "/users/get-user" "${DATA_DIR}/get-user.json"
-test_endpoint "Get Feed" "/users/get-feed" "${DATA_DIR}/get-feed.json"
-test_endpoint "Get Story" "/users/get-story" "${DATA_DIR}/get-story.json"
-test_endpoint "Post Status" "/users/post-status" "${DATA_DIR}/post-status.json"
+# Status Endpoints
+echo -e "${YELLOW}=== STATUS ENDPOINTS ===${NC}\n"
+test_endpoint "Get Feed" "/status/get-feed" "${DATA_DIR}/get-feed.json"
+test_endpoint "Get Story" "/status/get-story" "${DATA_DIR}/get-story.json"
+test_endpoint "Post Status" "/status/post-status" "${DATA_DIR}/post-status.json"
 
 # Follow Endpoints
 echo -e "${YELLOW}=== FOLLOW ENDPOINTS ===${NC}\n"

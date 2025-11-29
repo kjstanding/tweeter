@@ -68,7 +68,11 @@ export class FollowService {
     pageSize: number,
     userAlias: string
   ): Promise<[UserDTO[], boolean]> {
-    const [users, hasMore] = FakeData.instance.getPageOfUsers(User.fromDTO(lastItem), pageSize, userAlias);
+    const [users, hasMore] = FakeData.instance.getPageOfUsers(
+      lastItem ? User.fromDTO(lastItem) : null,
+      pageSize,
+      userAlias
+    );
     const userDTOs = users.map((user) => user.dto);
     return [userDTOs, hasMore];
   }

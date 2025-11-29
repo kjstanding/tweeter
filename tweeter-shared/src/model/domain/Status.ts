@@ -262,7 +262,7 @@ export class Status {
     };
   }
 
-  public static fromDTO(statusDTO: StatusDTO | null): Status | null {
-    return statusDTO == null ? null : new Status(statusDTO.post, User.fromDTO(statusDTO.user)!, statusDTO.timestamp);
+  public static fromDTO(statusDTO: StatusDTO): Status {
+    return new Status(statusDTO.post, User.fromDTO(statusDTO.user), statusDTO.timestamp);
   }
 }

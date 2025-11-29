@@ -3,6 +3,6 @@
   "lastName": "Doe",
   "alias": "@johndoe",
   "password": "securepassword123",
-  "userImageBytes": [137, 80, 78, 71, 13, 10, 26, 10],
+  "userImageBase64": "iVBORw0KGgo=",
   "imageFileExtension": "png"
 }

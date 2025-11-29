@@ -1,4 +1,4 @@
-import { UserDTO } from "../dto/UserDTO";
+import { UserDTO } from '../dto/UserDTO';
 
 export class User {
   private _firstName: string;
@@ -80,7 +80,7 @@ export class User {
     };
   }
 
-  public static fromDTO(userDTO: UserDTO | null): User | null {
-    return userDTO == null ? null : new User(userDTO.firstName, userDTO.lastName, userDTO.alias, userDTO.imageUrl);
+  public static fromDTO(userDTO: UserDTO): User {
+    return new User(userDTO.firstName, userDTO.lastName, userDTO.alias, userDTO.imageUrl);
   }
 }

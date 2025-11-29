@@ -10,7 +10,7 @@ export const handler = async (request: RegisterRequest): Promise<AuthResponse> =
       request.lastName,
       request.alias,
       request.password,
-      request.userImageBytes,
+      request.userImageBase64,
       request.imageFileExtension
     );
 
