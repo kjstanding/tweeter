@@ -13,8 +13,7 @@ export type { GetUserRequest } from './model/net/request/GetUserRequest';
 export type { IsFollowerStatusRequest } from './model/net/request/IsFollowerStatusRequest';
 export type { LoginRequest } from './model/net/request/LoginRequest';
 export type { LogoutRequest } from './model/net/request/LogoutRequest';
-export type { PagedStatusItemRequest } from './model/net/request/PagedStatusItemRequest';
-export type { PagedUserItemRequest } from './model/net/request/PagedUserItemRequest';
+export type { PagedItemRequest } from './model/net/request/PagedItemRequest';
 export type { PostStatusRequest } from './model/net/request/PostStatusRequest';
 export type { RegisterRequest } from './model/net/request/RegisterRequest';
 
@@ -24,8 +23,7 @@ export type { FollowResponse } from './model/net/response/FollowResponse';
 export type { GetUserResponse } from './model/net/response/GetUserResponse';
 export type { IsFollowerStatusResponse } from './model/net/response/IsFollowerStatusResponse';
 export type { AuthResponse } from './model/net/response/AuthResponse';
-export type { PagedStatusItemResponse } from './model/net/response/PagedStatusItemResponse';
-export type { PagedUserItemResponse } from './model/net/response/PagedUserItemResponse';
+export type { PagedItemResponse } from './model/net/response/PagedItemResponse';
 export type { TweeterResponse } from './model/net/response/TweeterResponse';
 
 // DTOs

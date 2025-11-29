@@ -1,7 +1,7 @@
-import { PagedUserItemRequest, PagedUserItemResponse } from 'tweeter-shared';
+import { PagedItemRequest, PagedItemResponse, UserDTO } from 'tweeter-shared';
 import { FollowService } from '../../model/service/FollowService';
 
-export const handler = async (request: PagedUserItemRequest): Promise<PagedUserItemResponse> => {
+export const handler = async (request: PagedItemRequest<UserDTO>): Promise<PagedItemResponse<UserDTO>> => {
   const followService = new FollowService();
 
   try {
@@ -15,14 +15,14 @@ export const handler = async (request: PagedUserItemRequest): Promise<PagedUserI
     return {
       success: true,
       message: null,
-      users: users,
+      items: users,
       hasMore: hasMore,
     };
   } catch (error) {
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Failed to get followers',
-      users: [],
+      items: [],
       hasMore: false,
     };
   }

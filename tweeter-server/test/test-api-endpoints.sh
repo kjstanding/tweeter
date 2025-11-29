@@ -54,7 +54,7 @@ test_endpoint() {
 
 # Script directory (where the test data is)
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DATA_DIR="${SCRIPT_DIR}/lambda-test-data"
+DATA_DIR="${SCRIPT_DIR}/api-test-data"
 
 echo -e "${YELLOW}========================================${NC}"
 echo -e "${YELLOW}API Gateway Endpoint Test Suite${NC}"

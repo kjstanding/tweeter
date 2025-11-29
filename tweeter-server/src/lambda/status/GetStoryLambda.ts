@@ -1,7 +1,7 @@
-import { PagedStatusItemRequest, PagedStatusItemResponse } from 'tweeter-shared';
+import { PagedItemRequest, PagedItemResponse, StatusDTO } from 'tweeter-shared';
 import { StatusService } from '../../model/service/StatusService';
 
-export const handler = async (request: PagedStatusItemRequest): Promise<PagedStatusItemResponse> => {
+export const handler = async (request: PagedItemRequest<StatusDTO>): Promise<PagedItemResponse<StatusDTO>> => {
   const statusService = new StatusService();
 
   try {
@@ -15,14 +15,14 @@ export const handler = async (request: PagedStatusItemRequest): Promise<PagedSta
     return {
       success: true,
       message: null,
-      statuses: statuses,
+      items: statuses,
       hasMore: hasMore,
     };
   } catch (error) {
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Failed to get story',
-      statuses: [],
+      items: [],
       hasMore: false,
     };
   }
