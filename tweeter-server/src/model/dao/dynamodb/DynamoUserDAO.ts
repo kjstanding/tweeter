@@ -1,17 +1,11 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
 import { IUserDAO } from '../interface/IUserDAO';
 import { UserDTO } from 'tweeter-shared';
+import { BaseDynamoDAO } from './BaseDynamoDAO';
 
 const TABLE_NAME = 'tweeter-users';
 
-export class DynamoUserDAO implements IUserDAO {
-  private client: DynamoDBDocumentClient;
-
-  constructor() {
-    this.client = DynamoDBDocumentClient.from(new DynamoDBClient());
-  }
-
+export class DynamoUserDAO extends BaseDynamoDAO implements IUserDAO {
   async createUser(
     alias: string,
     firstName: string,

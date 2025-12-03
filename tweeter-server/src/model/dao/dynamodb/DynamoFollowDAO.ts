@@ -1,18 +1,13 @@
-import { DynamoDBClient, Select } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand, DeleteCommand, GetCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
+import { Select } from '@aws-sdk/client-dynamodb';
+import { PutCommand, DeleteCommand, GetCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { IFollowDAO } from '../interface/IFollowDAO';
 import { UserDTO } from 'tweeter-shared';
+import { BaseDynamoDAO } from './BaseDynamoDAO';
 
 const TABLE_NAME = 'tweeter-follows';
 const INDEX_NAME = 'followee-follower-index';
 
-export class DynamoFollowDAO implements IFollowDAO {
-  private client: DynamoDBDocumentClient;
-
-  constructor() {
-    this.client = DynamoDBDocumentClient.from(new DynamoDBClient());
-  }
-
+export class DynamoFollowDAO extends BaseDynamoDAO implements IFollowDAO {
   async follow(follower: UserDTO, followee: UserDTO): Promise<void> {
     const params = {
       TableName: TABLE_NAME,
@@ -78,23 +73,12 @@ export class DynamoFollowDAO implements IFollowDAO {
       };
     }
 
-    const result = await this.client.send(new QueryCommand(params));
-
-    if (!result.Items || result.Items.length === 0) {
-      return [[], false];
-    }
-
-    const hasMore = result.Items.length > pageSize;
-    const items = hasMore ? result.Items.slice(0, pageSize) : result.Items;
-
-    const users: UserDTO[] = items.map((item) => ({
+    return this.doPaginatedQuery(params, pageSize, (item) => ({
       alias: item.follower_alias,
       firstName: item.follower_firstName,
       lastName: item.follower_lastName,
       imageUrl: item.follower_imageUrl,
     }));
-
-    return [users, hasMore];
   }
 
   async getFollowees(
@@ -118,23 +102,12 @@ export class DynamoFollowDAO implements IFollowDAO {
       };
     }
 
-    const result = await this.client.send(new QueryCommand(params));
-
-    if (!result.Items || result.Items.length === 0) {
-      return [[], false];
-    }
-
-    const hasMore = result.Items.length > pageSize;
-    const items = hasMore ? result.Items.slice(0, pageSize) : result.Items;
-
-    const users: UserDTO[] = items.map((item) => ({
+    return this.doPaginatedQuery(params, pageSize, (item) => ({
       alias: item.followee_alias,
       firstName: item.followee_firstName,
       lastName: item.followee_lastName,
       imageUrl: item.followee_imageUrl,
     }));
-
-    return [users, hasMore];
   }
 
   async getFollowerCount(followeeAlias: string): Promise<number> {

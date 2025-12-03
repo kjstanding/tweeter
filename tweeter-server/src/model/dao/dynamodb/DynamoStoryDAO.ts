@@ -1,17 +1,11 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand } from '@aws-sdk/lib-dynamodb';
 import { IStoryDAO } from '../interface/IStoryDAO';
 import { StatusDTO } from 'tweeter-shared';
+import { BaseDynamoDAO } from './BaseDynamoDAO';
 
 const TABLE_NAME = 'tweeter-story';
 
-export class DynamoStoryDAO implements IStoryDAO {
-  private client: DynamoDBDocumentClient;
-
-  constructor() {
-    this.client = DynamoDBDocumentClient.from(new DynamoDBClient());
-  }
-
+export class DynamoStoryDAO extends BaseDynamoDAO implements IStoryDAO {
   async addStatusToStory(status: StatusDTO): Promise<void> {
     const params = {
       TableName: TABLE_NAME,
@@ -46,16 +40,7 @@ export class DynamoStoryDAO implements IStoryDAO {
       };
     }
 
-    const result = await this.client.send(new QueryCommand(params));
-
-    if (!result.Items || result.Items.length === 0) {
-      return [[], false];
-    }
-
-    const hasMore = result.Items.length > pageSize;
-    const items = hasMore ? result.Items.slice(0, pageSize) : result.Items;
-
-    const statuses: StatusDTO[] = items.map((item) => ({
+    return this.doPaginatedQuery(params, pageSize, (item) => ({
       user: {
         alias: item.author_alias,
         firstName: item.author_firstName,
@@ -65,7 +50,5 @@ export class DynamoStoryDAO implements IStoryDAO {
       post: item.post,
       timestamp: item.timestamp,
     }));
-
-    return [statuses, hasMore];
   }
 }

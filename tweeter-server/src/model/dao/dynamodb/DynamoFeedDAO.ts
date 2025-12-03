@@ -1,17 +1,11 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand, QueryCommand, BatchWriteCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand, BatchWriteCommand } from '@aws-sdk/lib-dynamodb';
 import { IFeedDAO } from '../interface/IFeedDAO';
 import { StatusDTO } from 'tweeter-shared';
+import { BaseDynamoDAO } from './BaseDynamoDAO';
 
 const TABLE_NAME = 'tweeter-feed';
 
-export class DynamoFeedDAO implements IFeedDAO {
-  private client: DynamoDBDocumentClient;
-
-  constructor() {
-    this.client = DynamoDBDocumentClient.from(new DynamoDBClient());
-  }
-
+export class DynamoFeedDAO extends BaseDynamoDAO implements IFeedDAO {
   async addStatusToFeed(userAlias: string, status: StatusDTO): Promise<void> {
     const params = {
       TableName: TABLE_NAME,
@@ -47,16 +41,7 @@ export class DynamoFeedDAO implements IFeedDAO {
       };
     }
 
-    const result = await this.client.send(new QueryCommand(params));
-
-    if (!result.Items || result.Items.length === 0) {
-      return [[], false];
-    }
-
-    const hasMore = result.Items.length > pageSize;
-    const items = hasMore ? result.Items.slice(0, pageSize) : result.Items;
-
-    const statuses: StatusDTO[] = items.map((item) => ({
+    return this.doPaginatedQuery(params, pageSize, (item) => ({
       user: {
         alias: item.author_alias,
         firstName: item.author_firstName,
@@ -66,8 +51,6 @@ export class DynamoFeedDAO implements IFeedDAO {
       post: item.post,
       timestamp: item.timestamp,
     }));
-
-    return [statuses, hasMore];
   }
 
   async batchWriteFeedItems(followers: string[], status: StatusDTO): Promise<void> {

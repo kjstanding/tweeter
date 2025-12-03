@@ -1,17 +1,11 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand, GetCommand, DeleteCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand, GetCommand, DeleteCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { IAuthTokenDAO } from '../interface/IAuthTokenDAO';
+import { BaseDynamoDAO } from './BaseDynamoDAO';
 
 const TABLE_NAME = 'tweeter-authtokens';
 const AUTHTOKEN_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
 
-export class DynamoAuthTokenDAO implements IAuthTokenDAO {
-  private client: DynamoDBDocumentClient;
-
-  constructor() {
-    this.client = DynamoDBDocumentClient.from(new DynamoDBClient());
-  }
-
+export class DynamoAuthTokenDAO extends BaseDynamoDAO implements IAuthTokenDAO {
   async createAuthToken(token: string, alias: string, timestamp: number): Promise<void> {
     const params = {
       TableName: TABLE_NAME,
