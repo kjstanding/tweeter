@@ -13,7 +13,7 @@ const ItemScroller = <T, S>(props: Props<T, S>) => {
   const { displayErrorMessage } = useToastListener();
   const [items, setItems] = useState<T[]>([]);
   const [newItems, setNewItems] = useState<T[]>([]);
-  const [changedDisplayedUser, setChangedDisplayedUser] = useState(true);
+  const [changedDisplayedUser, setChangedDisplayedUser] = useState(false);
 
   const { displayedUser, authToken } = useUserInfo();
 
