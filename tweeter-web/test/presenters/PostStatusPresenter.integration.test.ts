@@ -3,8 +3,8 @@ import { Buffer } from 'buffer';
 import { ServerFacade } from '../../src/model/network/ServerFacade';
 import { StatusService } from '../../src/model/service/StatusService';
 import { PostStatusPresenter, PostStatusView } from '../../src/presenters/PostStatusPresenter';
-import { RegisterRequest, AuthToken, User, Status } from 'tweeter-shared';
-import { instance, mock, spy, verify, capture, anything } from '@typestrong/ts-mockito';
+import { RegisterRequest, AuthToken, User } from 'tweeter-shared';
+import { instance, mock, verify } from '@typestrong/ts-mockito';
 
 describe('Post Status Integration Test', () => {
   const serverFacade = new ServerFacade();
